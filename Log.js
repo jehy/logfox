@@ -1,7 +1,6 @@
 'use strict';
 var cliColor      = require('colors/safe'),
     fs            = require('fs'),
-    _             = require('underscore'),
     safeStringify = require('json-stringify-safe');
 /**
  * Log module - Module for writing logs to console with cool colors
@@ -171,16 +170,22 @@ var LogWriter = function (config) {
     return false;
   };
 
+  this.isObject = function (obj) {
+    var type = typeof obj;
+    return type === 'function' || type === 'object' && !!obj;
+  };
+
   this.log = function (level, data, additionalData) {
     var recordId = this.orderId;
     this.orderId++;
     var record = {"data": [], "msg": ""};
     for (var i = 0, len = data.length; i < len; i++) {
+
       if (data[i] instanceof Error) {
         record.data.push({"Error": data[i].toString()});// Error in not correctly serialized to JSON otherwise
         //and it must be an object for kibana better understanding
       }
-      else if (_.isObject(data[i]))
+      else if (this.isObject(data[i]))
         record.data.push(data[i]);
       else {
         if (record.msg.length > 0)

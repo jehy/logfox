@@ -1,6 +1,6 @@
 {
   "name": "yodel",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Yet Other Damn Elegant Logger",
   "main": "Log.js",
   "scripts": {
@@ -18,7 +18,6 @@
   "dependencies": {
     "colors": "^1.1.2",
     "fs": "0.0.1-security",
-    "underscore": "^1.8.3",
     "json-stringify-safe": "^5.0.1"
   },
   "devDependencies": {
