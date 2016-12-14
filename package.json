@@ -1,0 +1,26 @@
+{
+  "name": "yodel",
+  "version": "0.0.1",
+  "description": "Yet Other Damn Elegant Logger",
+  "main": "Log.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jehy/yodel.git"
+  },
+  "keywords": [
+    "logger",
+	"log"
+  ],
+  "author": "Jehy",
+  "license": "MIT",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "fs": "0.0.1-security",
+    "underscore": "^1.8.3",
+    "json-stringify-safe": "^5.0.1"
+  },
+  "devDependencies": {
+  }
+}
