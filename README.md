@@ -40,6 +40,8 @@ app.use(function (req, res, next) {
   //get or set request id
   if (_.has(req.headers, 'X-My-ID'))
     req.id = req.headers['X-My-ID'];
+  else
+    req.id = "moduleName1:" + req.id;  
   req.log = LogWriter.getLogger({requestId: req.id});
 });
 
