@@ -1,6 +1,6 @@
 {
   "name": "yodel",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Yet Other Damn Elegant Logger",
   "main": "Log.js",
   "scripts": {

@@ -194,6 +194,8 @@ var LogWriter = function (config) {
           record.msg = data[i];
       }
     }
+    if (record.msg.length === 0)
+      record.msg = "No message";
     var logData = {
       "level": level,
       "@timestamp": (new Date()).toISOString(),
