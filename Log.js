@@ -15,18 +15,18 @@ var Logger = function (logWriter, additionalData) {
    */
   this.e = function () {
     var data = Array.prototype.slice.call(arguments);
-    logWriter.log("error", data, additionalData);
+    logWriter.log('error', data, additionalData);
   };
   /**
    * Use this when you suspect something shady is going on. You may not be completely in full on error mode,
    * but maybe you recovered from some unexpected behavior. Basically, use this to log stuff you didn't expect
-   * to happen but isn't necessarily an error. Kind of like a "hey, this happened, and it's weird, we should look into it."
+   * to happen but isn't necessarily an error. Kind of like a 'hey, this happened, and it's weird, we should look into it.'
    * @name w
    * @param data
    */
   this.w = function () {
     var data = Array.prototype.slice.call(arguments);
-    logWriter.log("warn", data, additionalData);
+    logWriter.log('warn', data, additionalData);
   };
   /**
    * Use this to post useful information to the log. For example: that you have successfully connected to a server.
@@ -36,7 +36,7 @@ var Logger = function (logWriter, additionalData) {
    */
   this.i = function () {
     var data = Array.prototype.slice.call(arguments);
-    logWriter.log("info", data, additionalData);
+    logWriter.log('info', data, additionalData);
   };
   /**
    * Use this for debugging purposes. If you want to print out a bunch of messages so you can log the exact flow of
@@ -46,7 +46,7 @@ var Logger = function (logWriter, additionalData) {
    */
   this.d = function () {
     var data = Array.prototype.slice.call(arguments);
-    logWriter.log("debug", data, additionalData);
+    logWriter.log('debug', data, additionalData);
   };
   /**
    * Use this when you want to go absolutely nuts with your config.
@@ -56,7 +56,7 @@ var Logger = function (logWriter, additionalData) {
    */
   this.v = function () {
     var data = Array.prototype.slice.call(arguments);
-    logWriter.log("verbose", data, additionalData);
+    logWriter.log('verbose', data, additionalData);
   };
   /**
    * Use this when you want to log things which should not be logged - like user cridentials, crazy data amounts, etc.
@@ -66,7 +66,7 @@ var Logger = function (logWriter, additionalData) {
    */
   this.silly = function () {
     var data = Array.prototype.slice.call(arguments);
-    logWriter.log("silly", data, additionalData);
+    logWriter.log('silly', data, additionalData);
   }
 };
 
@@ -90,7 +90,7 @@ var LogWriter = function (config) {
     var thisLogger = this.selfLogger;
     var thisLogWriter = this;
     if (this.started) {
-      this.selfLogger.e("Can not start once more - already started!");
+      this.selfLogger.e('Can not start once more - already started!');
       return;
     }
     this.started = true;
@@ -100,10 +100,10 @@ var LogWriter = function (config) {
         autoClose: true
       });
       this.writeStream.on('open', function () {
-        thisLogger.i("Logger started");
+        thisLogger.i('Logger started');
       });
       this.writeStream.on('error', function (err) {
-        console.log(cliColor.red.bold("createWriteStream error:" + err));
+        console.log(cliColor.red.bold('createWriteStream error:' + err));
         process.exit(1);
       });
     }
@@ -131,7 +131,7 @@ var LogWriter = function (config) {
 
   this.stop = function () {
     if (!this.started) {
-      console.log(cliColor.red.bold("Can not stop - logger service not started"));
+      console.log(cliColor.red.bold('Can not stop - logger service not started'));
       return;
     }
     this.writeStream.end();
@@ -140,29 +140,29 @@ var LogWriter = function (config) {
 
   this.colorize = function (type, data) {
     switch (type) {
-      case "error":
+      case 'error':
         return cliColor.red.bold(data);
         break;
-      case "warn":
+      case 'warn':
         return cliColor.yellow(data);
         break;
-      case "info":
+      case 'info':
         return cliColor.blue(data);
         break;
-      case "debug":
+      case 'debug':
         return cliColor.green(data);
         break;
-      case "verbose":
+      case 'verbose':
         return cliColor.white(data);
         break;
-      case "silly":
+      case 'silly':
         return cliColor.rainbow(data);
         break;
     }
   };
 
   this.shouldLog = function (level, configMinLvl) {
-    var priority = ["error", "warn", "info", "debug", "verbose", "silly"];
+    var priority = ['error', 'warn', 'info', 'debug', 'verbose', 'silly'];
     var NeedLog = priority.indexOf(configMinLvl);
     var myLog = priority.indexOf(level);
     if (myLog <= NeedLog)
@@ -178,29 +178,29 @@ var LogWriter = function (config) {
   this.log = function (level, data, additionalData) {
     var recordId = this.orderId;
     this.orderId++;
-    var record = {"data": [], "msg": ""};
+    var record = {'data': [], 'msg': ''};
     for (var i = 0, len = data.length; i < len; i++) {
 
       if (data[i] instanceof Error) {
-        record.data.push({"Error": data[i].toString()});// Error in not correctly serialized to JSON otherwise
+        record.data.push({'Error': data[i].toString(), 'Stack': data[i].stack});// Error in not correctly serialized to JSON otherwise
         //and it must be an object for kibana better understanding
       }
       else if (this.isObject(data[i]))
         record.data.push(data[i]);
       else {
         if (record.msg.length > 0)
-          record.msg += " " + data[i];
+          record.msg += ' ' + data[i];
         else
           record.msg = data[i];
       }
     }
     if (record.msg.length === 0)
-      record.msg = "No message";
+      record.msg = 'No message';
     var logData = {
-      "level": level,
-      "@timestamp": (new Date()).toISOString(),
-      "@message": record.msg,
-      "orderId": recordId
+      'level': level,
+      '@timestamp': (new Date()).toISOString(),
+      '@message': record.msg,
+      'orderId': recordId
     };
     if (additionalData != null)
       logData = Object.assign(logData, additionalData);
@@ -209,7 +209,7 @@ var LogWriter = function (config) {
     if (config.logToConsole && this.shouldLog(level, config.logLevel.console)) {
       console.log(this.colorize(level, safeStringify(logData, null, 4)));
     }
-    if (config.logToFile && this.shouldLog(level, config.logLevel.file) && (level != "silly")) {
+    if (config.logToFile && this.shouldLog(level, config.logLevel.file) && (level != 'silly')) {
       //never log silly things to file!
       logData = safeStringify(logData) + "\n";
       this.writeStream.write(logData);
