@@ -1,13 +1,13 @@
 {
-  "name": "yodel",
+  "name": "logFox",
   "version": "0.0.3",
-  "description": "Yet Other Damn Elegant Logger",
+  "description": "Application logger for exxpress+elastic search",
   "main": "Log.js",
   "scripts": {
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jehy/yodel.git"
+    "url": "https://github.com/jehy/logfox.git"
   },
   "keywords": [
     "logger",

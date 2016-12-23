@@ -1,8 +1,8 @@
-#yodel
+#LogFox
 
 ##Installation
 ```bash
-npm install git+https://git@github.com/jehy/yodel.git
+npm install logfox
 ```
 
 ##Usage
@@ -27,7 +27,7 @@ var
     express      = require('express'),
     app          = express(),
     config       = require('./config.json'),
-    LogWriter    = new (require('yodel'))(config.Logging),
+    LogWriter    = new (require('logfox'))(config.Logging),
     log          = LogWriter.getLogger(),
     addRequestId = require('express-request-id')();
     
