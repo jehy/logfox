@@ -1,17 +1,16 @@
 {
   "name": "logfox",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Application logger for express+elastic search",
   "main": "Log.js",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/jehy/logfox.git"
   },
   "keywords": [
     "logger",
-	"log"
+    "log"
   ],
   "author": "Jehy",
   "license": "MIT",
@@ -20,6 +19,5 @@
     "fs": "0.0.1-security",
     "json-stringify-safe": "^5.0.1"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
