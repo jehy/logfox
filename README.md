@@ -1,5 +1,7 @@
 #LogFox
 
+[![Build Status](https://travis-ci.org/jehy/logfox.svg?branch=master)](https://travis-ci.org/jehy/logfox)
+
 ##Installation
 ```bash
 npm install logfox
