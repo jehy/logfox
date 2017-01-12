@@ -78,6 +78,17 @@ var LogWriter = function (config) {
   this.orderId = 1;
   this.selfLogger = null;
 
+
+  if (!isObject(config)) {
+    throw new Error('Invalid config for logfox (not an object)');
+  }
+  if (config.logToFile && (!config.logFile || !has(config, 'logLevel') || !config.logLevel.file)) {
+    throw new Error('Invalid config for logfox (wrong file logging config)');
+  }
+  if (config.logToConsole && (!has(config, 'logLevel') || !config.logLevel.console)) {
+    throw new Error('Invalid config for logfox (wrong console logging config)');
+  }
+
   this.rotate = function () {
     this.selfLogger.i('got SIGHUP, restarting logging system');
     this.restart();
@@ -169,6 +180,10 @@ var LogWriter = function (config) {
       return true;
     return false;
   };
+
+  function has(obj, key) {
+    return obj != null && hasOwnProperty.call(obj, key);
+  }
 
   this.isObject = function (obj) {
     var type = typeof obj;
