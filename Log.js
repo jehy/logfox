@@ -79,13 +79,13 @@ var LogWriter = function (config) {
   this.selfLogger = null;
 
 
-  if (!isObject(config)) {
+  if (!this.isObject(config)) {
     throw new Error('Invalid config for logfox (not an object)');
   }
-  if (config.logToFile && (!config.logFile || !has(config, 'logLevel') || !config.logLevel.file)) {
+  if (config.logToFile && (!config.logFile || !this.has(config, 'logLevel') || !config.logLevel.file)) {
     throw new Error('Invalid config for logfox (wrong file logging config)');
   }
-  if (config.logToConsole && (!has(config, 'logLevel') || !config.logLevel.console)) {
+  if (config.logToConsole && (!this.has(config, 'logLevel') || !config.logLevel.console)) {
     throw new Error('Invalid config for logfox (wrong console logging config)');
   }
 
@@ -181,7 +181,7 @@ var LogWriter = function (config) {
     return false;
   };
 
-  function has(obj, key) {
+  this.has = function (obj, key) {
     return obj != null && hasOwnProperty.call(obj, key);
   }
 
