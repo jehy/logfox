@@ -6,6 +6,17 @@ var cliColor      = require('colors/safe'),
  * Log module - Module for writing logs to console with cool colors
  * @module Log
  */
+
+
+var has = function (obj, key) {
+  return obj != null && hasOwnProperty.call(obj, key);
+};
+
+var isObject = function (obj) {
+  var type = typeof obj;
+  return type === 'function' || type === 'object' && !!obj;
+};
+
 var Logger = function (logWriter, additionalData) {
   /**
    * This is for when bad stuff happens. Use this tag in places like inside a catch statement.
@@ -79,15 +90,16 @@ var LogWriter = function (config) {
   this.selfLogger = null;
 
 
-  if (!this.isObject(config)) {
+  if (!isObject(config)) {
     throw new Error('Invalid config for logfox (not an object)');
   }
-  if (config.logToFile && (!config.logFile || !this.has(config, 'logLevel') || !config.logLevel.file)) {
+  if (config.logToFile && (!config.logFile || !has(config, 'logLevel') || !config.logLevel.file)) {
     throw new Error('Invalid config for logfox (wrong file logging config)');
   }
-  if (config.logToConsole && (!this.has(config, 'logLevel') || !config.logLevel.console)) {
+  if (config.logToConsole && (!has(config, 'logLevel') || !config.logLevel.console)) {
     throw new Error('Invalid config for logfox (wrong console logging config)');
   }
+
 
   this.rotate = function () {
     this.selfLogger.i('got SIGHUP, restarting logging system');
@@ -181,14 +193,6 @@ var LogWriter = function (config) {
     return false;
   };
 
-  this.has = function (obj, key) {
-    return obj != null && hasOwnProperty.call(obj, key);
-  }
-
-  this.isObject = function (obj) {
-    var type = typeof obj;
-    return type === 'function' || type === 'object' && !!obj;
-  };
 
   this.log = function (level, data, additionalData) {
     var recordId = this.orderId;
@@ -200,7 +204,7 @@ var LogWriter = function (config) {
         record.data.push({'Error': data[i].toString(), 'Stack': data[i].stack});// Error in not correctly serialized to JSON otherwise
         //and it must be an object for kibana better understanding
       }
-      else if (this.isObject(data[i]))
+      else if (isObject(data[i]))
         record.data.push(data[i]);
       else {
         if (record.msg.length > 0)
