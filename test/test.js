@@ -1,5 +1,6 @@
 var assert    = require('assert'),
     fs        = require('fs'),
+    Promise   = require('bluebird'),
     LogWriter = require('../Log.js');
 
 describe('logger', function () {
