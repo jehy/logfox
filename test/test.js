@@ -247,10 +247,11 @@ describe('logger', function () {
             done('fail');
           });
           LogWriterNew.on('started', function () {
+            var logWriterOld = logWriter;
+            logWriter = LogWriterNew;
+            logger = logWriter.getLogger();
             setTimeout(function () {
-              logWriter.stop();
-              logWriter = LogWriterNew;
-              logger = logWriter.getLogger();
+              logWriterOld.stop();
               logger.i("data new").then(function () {
                 fs.readFile(config.logFile, 'utf8', function (err, data) {
                   if (err) {
