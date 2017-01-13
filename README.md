@@ -29,16 +29,43 @@ var
     express      = require('express'),
     app          = express(),
     config       = require('./config.json'),
-    LogWriter    = new (require('logfox'))(config.Logging),
+    logWriter    = new (require('logfox'))(config.Logging),
     log          = LogWriter.getLogger(),
     addRequestId = require('express-request-id')();
     
     
-LogWriter.start();
+
+logWriter.start();
+logWriter.on('fatal', function () {
+  app.terminate();
+});
+app.log = logWriter.getLogger();
+
+process.on('exit', function () {
+  logWriter.stop(true);
+});
+
+
+process.on('SIGHUP', function () {
+  var LogWriterNew = new logWriter(config.Logging);
+  LogWriterNew.start();
+  LogWriterNew.on('fatal', function () {
+    app.terminate();
+  });
+
+  LogWriterNew.on('started', function () {
+    var logWriterOld = logWriter;
+    logWriter = LogWriterNew;
+    app.log = logWriter.getLogger();
+    setTimeout(function () {
+      logWriterOld.stop();
+    })
+  }, 1000 * 60);
+});
 
 app.use(addRequestId);
 //writing application wide logs:
-log.i('Express is up on port ' + config.port + ' in ' + app.settings.env + ' mode');
+app.log.i('Express is up on port ' + config.port + ' in ' + app.settings.env + ' mode');
 
 app.use(function (req, res, next) {
   //get or set request id
