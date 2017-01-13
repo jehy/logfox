@@ -20,7 +20,8 @@
     "bluebird": "^3.4.7",
     "colors": "^1.1.2",
     "fs": "0.0.1-security",
-    "json-stringify-safe": "^5.0.1"
+    "json-stringify-safe": "^5.0.1",
+    "object-assign": "^4.1.0"
   },
   "devDependencies": {
     "mocha": "^3.2.0"

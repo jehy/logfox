@@ -3,7 +3,8 @@ var cliColor      = require('colors/safe'),
     fs            = require('fs'),
     safeStringify = require('json-stringify-safe'),
     Promise       = require('bluebird'),
-    EventEmitter  = require('events');
+    objectAssign  = require('object-assign');
+EventEmitter = require('events');
 
 
 /**
@@ -214,6 +215,9 @@ var LogWriter = function (config) {
         if (data[i] instanceof Error) {
           record.data.push({'Error': data[i].toString(), 'Stack': data[i].stack});// Error in not correctly serialized to JSON otherwise
           //and it must be an object for kibana better understanding
+        }
+        else if (data[i] instanceof Array) {//for logstash whuch does not like arrays o_O
+          record.data.push(objectAssign({}, data[i]));
         }
         else if (isObject(data[i]))
           record.data.push(data[i]);
