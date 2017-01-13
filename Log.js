@@ -3,8 +3,8 @@ var cliColor      = require('colors/safe'),
     fs            = require('fs'),
     safeStringify = require('json-stringify-safe'),
     Promise       = require('bluebird'),
-    objectAssign  = require('object-assign');
-EventEmitter = require('events');
+    objectAssign  = require('object-assign'),
+    EventEmitter  = require('events');
 
 
 /**
