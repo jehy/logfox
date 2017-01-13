@@ -3,7 +3,9 @@
   "version": "0.0.7",
   "description": "Application logger for express+elastic search",
   "main": "Log.js",
-  "scripts": {},
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/jehy/logfox.git"
@@ -15,9 +17,12 @@
   "author": "Jehy",
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^3.4.7",
     "colors": "^1.1.2",
     "fs": "0.0.1-security",
     "json-stringify-safe": "^5.0.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "mocha": "^3.2.0"
+  }
 }

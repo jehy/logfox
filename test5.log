@@ -1,0 +1,34 @@
+{"level":"info","@timestamp":"2017-01-13T12:43:37.975Z","@message":"Logger started","orderId":4}
+{"level":"info","@timestamp":"2017-01-13T12:43:37.975Z","@message":"data 1","orderId":5}
+{"level":"info","@timestamp":"2017-01-13T12:43:37.976Z","@message":"Logging system restarted","orderId":1}
+{"level":"info","@timestamp":"2017-01-13T12:43:37.976Z","@message":"data 2","orderId":2}
+{"level":"info","@timestamp":"2017-01-13T12:43:37.984Z","@message":"got SIGHUP, restarting logging system","orderId":3}
+{"level":"info","@timestamp":"2017-01-13T12:43:37.988Z","@message":"Logger started","orderId":4}
+{"level":"info","@timestamp":"2017-01-13T12:43:37.988Z","@message":"data 1","orderId":5}
+{"level":"info","@timestamp":"2017-01-13T12:43:37.988Z","@message":"Logging system restarted","orderId":1}
+{"level":"info","@timestamp":"2017-01-13T12:43:37.988Z","@message":"data 2","orderId":2}
+{"level":"error","@timestamp":"2017-01-13T12:43:37.997Z","@message":"No message","orderId":3,"data":[{"Error":"Error: ETXTBSY: text file is busy, unlink 'test5.log'","Stack":"Error: ETXTBSY: text file is busy, unlink 'test5.log'\n    at Error (native)"}]}
+{"level":"info","@timestamp":"2017-01-13T12:44:38.993Z","@message":"Logger started","orderId":1}
+{"level":"info","@timestamp":"2017-01-13T12:44:38.993Z","@message":"data 1","orderId":2}
+{"level":"info","@timestamp":"2017-01-13T12:44:38.999Z","@message":"got SIGHUP, restarting logging system","orderId":3}
+{"level":"info","@timestamp":"2017-01-13T12:44:39.003Z","@message":"Logger started","orderId":4}
+{"level":"info","@timestamp":"2017-01-13T12:44:39.003Z","@message":"data 1","orderId":5}
+{"level":"info","@timestamp":"2017-01-13T12:44:39.003Z","@message":"Logging system restarted","orderId":1}
+{"level":"info","@timestamp":"2017-01-13T12:44:39.003Z","@message":"data 2","orderId":2}
+{"level":"info","@timestamp":"2017-01-13T12:44:39.010Z","@message":"got SIGHUP, restarting logging system","orderId":3}
+{"level":"info","@timestamp":"2017-01-13T12:44:39.016Z","@message":"Logger started","orderId":4}
+{"level":"info","@timestamp":"2017-01-13T12:44:39.016Z","@message":"data 1","orderId":5}
+{"level":"error","@timestamp":"2017-01-13T12:44:39.022Z","@message":"No message","orderId":6,"data":[{"Error":"Error: ENOENT: no such file or directory, unlink 'test5.log-2'","Stack":"Error: ENOENT: no such file or directory, unlink 'test5.log-2'\n    at Error (native)"}]}
+{"level":"info","@timestamp":"2017-01-13T12:44:39.022Z","@message":"Logging system restarted","orderId":1}
+{"level":"info","@timestamp":"2017-01-13T12:44:39.022Z","@message":"data 2","orderId":2}
+{"level":"info","@timestamp":"2017-01-13T12:44:57.112Z","@message":"Logger started","orderId":1}
+{"level":"info","@timestamp":"2017-01-13T12:44:57.112Z","@message":"data 1","orderId":2}
+{"level":"info","@timestamp":"2017-01-13T12:44:57.122Z","@message":"got SIGHUP, restarting logging system","orderId":3}
+{"level":"info","@timestamp":"2017-01-13T12:44:57.127Z","@message":"Logger started","orderId":4}
+{"level":"info","@timestamp":"2017-01-13T12:44:57.127Z","@message":"data 1","orderId":5}
+{"level":"info","@timestamp":"2017-01-13T12:44:57.128Z","@message":"Logging system restarted","orderId":1}
+{"level":"info","@timestamp":"2017-01-13T12:44:57.128Z","@message":"data 2","orderId":2}
+{"level":"info","@timestamp":"2017-01-13T12:44:57.134Z","@message":"got SIGHUP, restarting logging system","orderId":3}
+{"level":"error","@timestamp":"2017-01-13T12:44:57.145Z","@message":"No message","orderId":4,"data":[{"Error":"Error: ENOENT: no such file or directory, unlink 'test5.log-2'","Stack":"Error: ENOENT: no such file or directory, unlink 'test5.log-2'\n    at Error (native)"}]}
+{"level":"info","@timestamp":"2017-01-13T12:47:33.785Z","@message":"Logger started","orderId":1}
+{"level":"info","@timestamp":"2017-01-13T12:47:33.785Z","@message":"data 1","orderId":2}
