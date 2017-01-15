@@ -121,8 +121,9 @@ var LogWriter = function (config) {
 
     return new Promise(function (resolve, reject) {
       if (thisLogWriter.started) {
-        thisLogWriter.selfLogger.e('Can not start once more - already started!');
-        reject();
+        var msg = 'Can not start once more - already started!';
+        thisLogWriter.selfLogger.e(msg);
+        reject(msg);
         return;
       }
       console.log(cliColor.blue('Starting logging system'));
@@ -132,15 +133,16 @@ var LogWriter = function (config) {
           autoClose: true
         });
         thisLogWriter.writeStream.on('open', function () {
-          thisLogger.i('Logger started');
           thisLogWriter.started = true;
+          thisLogger.i('Logger started');
           thisLogWriter.emit('started');
           resolve();
         });
         thisLogWriter.writeStream.on('error', function (err) {
-          console.log(cliColor.red.bold('createWriteStream error:' + err));
+          var msg = 'createWriteStream error:' + err;
+          console.log(cliColor.red.bold(msg));
           thisLogWriter.emit('fatal');
-          reject();
+          reject(msg);
         });
       }
     });
@@ -202,6 +204,10 @@ var LogWriter = function (config) {
   this.log = function (level, data, additionalData) {
 
     var thisLogWriter = this;
+    if (this.started === false) {
+      this.emit('fatal');
+      throw new Error('logfox can not write log with stopped logwriter (' + level + ':' + safeStringify(logData) + ')');
+    }
     return new Promise(function (resolve, reject) {
       if (!config.logToFile && !config.logToConsole) {
         reject('Not configured for logging');

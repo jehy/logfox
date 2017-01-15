@@ -1,5 +1,5 @@
 var assert    = require('assert'),
-    fs        = require('fs'),
+    fsp       = require('fs-promise'),
     Promise   = require('bluebird'),
     LogWriter = require('../Log.js');
 
@@ -81,14 +81,17 @@ describe('logger', function () {
       }
     };
     var logWriter = new LogWriter(config);
-    logWriter.start();
+    logWriter.start().catch(function () {
+    });
     logWriter.on('fatal', function () {
       done()
     });
     logWriter.on('started', function () {
-      logWriter.stop();
-      fs.unlink(config.logFile);
-      done('fail');
+      logWriter.stop()
+        .then(function () {
+          fsp.unlink(config.logFile);
+          done('fail');
+        })
     });
   });
 
@@ -109,14 +112,20 @@ describe('logger', function () {
       done('fail')
     });
     logWriter.on('started', function () {
-      logWriter.stop().then(function () {
-        fs.unlink(config.logFile);
-        done();
-      })
+      logWriter.stop()
+        .then(function () {
+          return fsp.unlink(config.logFile);
+        })
+        .then(function () {
+          done();
+        })
+        .catch(function (err) {
+          done(err)
+        })
     });
   });
 
-  it('log some text', function (done) {
+  it('should log text', function (done) {
     var config = {
       "logFile": "test2.log",
       "logToConsole": true,
@@ -140,17 +149,24 @@ describe('logger', function () {
       logPromises.push(logger.d('try logging debug'));
       logPromises.push(logger.w('try logging warning'));
       logPromises.push(logger.silly('try logging silly %)'));
-      Promise.all(logPromises).then(function () {
-        logWriter.stop().then(function () {
-          fs.unlink(config.logFile);
+      Promise.all(logPromises)
+        .then(function () {
+          return logWriter.stop();
+        })
+        .then(function () {
+          return fsp.unlink(config.logFile);
+        })
+        .then(function () {
           done();
-        });
-      });
+        })
+        .catch(function (err) {
+          done(err)
+        })
     });
   });
 
 
-  it('log some objects', function (done) {
+  it('should log objects', function (done) {
     var config = {
       "logFile": "test3.log",
       "logToConsole": true,
@@ -168,22 +184,29 @@ describe('logger', function () {
     logWriter.on('started', function () {
       var logger = logWriter.getLogger();
       var sampleObject =
-          {
-            1: [2, 3, 4], 2: "text", 3: function () {
-            return 1;
-          }
-          };
-      logger.i(sampleObject).then(function () {
-        logWriter.stop().then(function () {
-          fs.unlink(config.logFile);
+            {
+              1: [2, 3, 4], 2: "text", 3: function () {
+              return 1;
+            }
+            };
+      logger.i(sampleObject)
+        .then(function () {
+          return logWriter.stop();
+        })
+        .then(function () {
+          return fsp.unlink(config.logFile);
+        })
+        .then(function () {
           done();
         })
-      });
+        .catch(function (err) {
+          done(err)
+        })
     });
   });
 
 
-  it('log some text AND objects', function (done) {
+  it('should log text AND objects', function (done) {
     var config = {
       "logFile": "test4.log",
       "logToConsole": true,
@@ -201,25 +224,32 @@ describe('logger', function () {
     logWriter.on('started', function () {
       var logger = logWriter.getLogger();
       var sampleObject =
-          {
-            1: [2, 3, 4], 2: "text", 3: function () {
-            return 1;
-          }
-          };
-      logger.i("wow, what is this?", sampleObject).then(function () {
-        logWriter.stop().then(function () {
-          fs.unlink(config.logFile);
+            {
+              1: [2, 3, 4], 2: "text", 3: function () {
+              return 1;
+            }
+            };
+      logger.i("wow, what is this?", sampleObject)
+        .then(function () {
+          return logWriter.stop();
+        })
+        .then(function () {
+          return fsp.unlink(config.logFile);
+        })
+        .then(function () {
           done();
         })
-      });
+        .catch(function (err) {
+          done(err)
+        })
     });
   });
 
-  it('check log rotate', function (done) {
+  it('should be able to rotate logs', function (done) {
     this.timeout(1000 * 4);
     var config = {
       "logFile": "test5.log",
-      "logToConsole": true,
+      "logToConsole": false,
       "logToFile": true,
       "logLevel": {
         "file": "verbose",
@@ -235,13 +265,11 @@ describe('logger', function () {
       var logger = logWriter.getLogger();
       var logFile2 = config.logFile + '.old';
 
-      logger.i("data old").then(function () {
-        fs.rename(config.logFile, logFile2, function (err) {
-          if (err) {
-            done(err);
-            return;
-          }
-
+      logger.i("data old")
+        .then(function () {
+          return fsp.rename(config.logFile, logFile2)
+        })
+        .then(function () {
           var LogWriterNew = new LogWriter(config);
           LogWriterNew.start();
           LogWriterNew.on('fatal', function () {
@@ -252,38 +280,82 @@ describe('logger', function () {
             logWriter = LogWriterNew;
             logger = logWriter.getLogger();
             setTimeout(function () {
-              logWriterOld.stop();
-              logger.i("data new").then(function () {
-                fs.readFile(config.logFile, 'utf8', function (err, data) {
-                  if (err) {
-                    done(err);
-                    return;
-                  }
-                  if (data.indexOf("data new") === -1) {
-                    done("New file has no new data");
-                    return;
-                  }
-                  console.log('New file data:' + "\n" + data);
-                  fs.readFile(logFile2, 'utf8', function (err, data2) {
-                    if (err) {
-                      done(err);
-                      return;
+                logWriterOld.stop();
+                logger.i("data new")
+                  .then(function () {
+                    return fsp.readFile(config.logFile, 'utf8');
+                  })
+                  .then(function (data) {
+                    if (data.indexOf("data new") === -1) {
+                      throw("New file has no new data");
                     }
+                    console.log('New file data:' + "\n" + data);
+                    return fsp.readFile(logFile2, 'utf8');
+                  })
+                  .then(function (data2) {
                     if (data2.indexOf("data old") === -1) {
-                      done("old file as no old data");
-                      return;
+                      throw("old file as no old data");
                     }
                     console.log('Old file data:' + "\n" + data2);
-                    done();
-                    fs.unlink(config.logFile);
-                    fs.unlink(logFile2);
+                    return Promise.all([fsp.unlink(config.logFile), fsp.unlink(logFile2)]);
+                  })
+                  .then(function () {
+                      done();
+                    }
+                  )
+                  .catch(function (err) {
+                    done(err)
                   });
-                });
-              })
-            }, 1000 * 2);
+              },
+              1000 * 2
+            )
+            ;
           });
+        })
+        .catch(function (err) {
+          done(err)
         });
-      });
+    });
+  });
+
+
+  it('should not log silly log level text', function (done) {
+    var config = {
+      "logFile": "test6.log",
+      "logToConsole": false,
+      "logToFile": true,
+      "logLevel": {
+        "file": "silly",
+        "console": "silly"
+      }
+    };
+    var logWriter = new LogWriter(config);
+    logWriter.start();
+    logWriter.on('fatal', function () {
+      done('fail')
+    });
+    logWriter.on('started', function () {
+      var logger = logWriter.getLogger();
+      logger.silly('try logging silly %)')
+        .then(function () {
+          return logWriter.stop()
+        })
+        .then(function () {
+          return fsp.readFile(config.logFile, 'utf8');
+        })
+        .then(function (data) {
+          if (data.indexOf("silly") !== -1) {
+            done("Silly things were logged");
+            return;
+          }
+          return fsp.unlink(config.logFile);
+        })
+        .then(function () {
+          done();
+        })
+        .catch(function (err) {
+          done(err)
+        })
     });
   });
 });
