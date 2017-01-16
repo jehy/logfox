@@ -184,11 +184,11 @@ describe('logger', function () {
     logWriter.on('started', function () {
       var logger = logWriter.getLogger();
       var sampleObject =
-            {
-              1: [2, 3, 4], 2: "text", 3: function () {
-              return 1;
-            }
-            };
+          {
+            1: [2, 3, 4], 2: "text", 3: function () {
+            return 1;
+          }
+          };
       logger.i(sampleObject)
         .then(function () {
           return logWriter.stop();
@@ -224,11 +224,11 @@ describe('logger', function () {
     logWriter.on('started', function () {
       var logger = logWriter.getLogger();
       var sampleObject =
-            {
-              1: [2, 3, 4], 2: "text", 3: function () {
-              return 1;
-            }
-            };
+          {
+            1: [2, 3, 4], 2: "text", 3: function () {
+            return 1;
+          }
+          };
       logger.i("wow, what is this?", sampleObject)
         .then(function () {
           return logWriter.stop();
@@ -279,37 +279,36 @@ describe('logger', function () {
             var logWriterOld = logWriter;
             logWriter = LogWriterNew;
             logger = logWriter.getLogger();
-            setTimeout(function () {
+            Promise.resolve()
+              .timeout(1000 * 2)
+              .then(function () {
                 logWriterOld.stop();
-                logger.i("data new")
-                  .then(function () {
-                    return fsp.readFile(config.logFile, 'utf8');
-                  })
-                  .then(function (data) {
-                    if (data.indexOf("data new") === -1) {
-                      throw("New file has no new data");
-                    }
-                    //console.log('New file data:' + "\n" + data);
-                    return fsp.readFile(logFile2, 'utf8');
-                  })
-                  .then(function (data2) {
-                    if (data2.indexOf("data old") === -1) {
-                      throw("old file as no old data");
-                    }
-                    //console.log('Old file data:' + "\n" + data2);
-                    return Promise.all([fsp.unlink(config.logFile), fsp.unlink(logFile2)]);
-                  })
-                  .then(function () {
-                      done();
-                    }
-                  )
-                  .catch(function (err) {
-                    done(err)
-                  });
-              },
-              1000 * 2
-            )
-            ;
+                return logger.i("data new");
+              })
+              .then(function () {
+                return fsp.readFile(config.logFile, 'utf8');
+              })
+              .then(function (data) {
+                if (data.indexOf("data new") === -1) {
+                  throw("New file has no new data");
+                }
+                //console.log('New file data:' + "\n" + data);
+                return fsp.readFile(logFile2, 'utf8');
+              })
+              .then(function (data2) {
+                if (data2.indexOf("data old") === -1) {
+                  throw("old file as no old data");
+                }
+                //console.log('Old file data:' + "\n" + data2);
+                return Promise.all([fsp.unlink(config.logFile), fsp.unlink(logFile2)]);
+              })
+              .then(function () {
+                  done();
+                }
+              )
+              .catch(function (err) {
+                done(err)
+              });
           });
         })
         .catch(function (err) {
