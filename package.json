@@ -1,6 +1,6 @@
 {
   "name": "logfox",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Application logger for express+elastic search",
   "main": "Log.js",
   "scripts": {
