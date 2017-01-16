@@ -289,14 +289,14 @@ describe('logger', function () {
                     if (data.indexOf("data new") === -1) {
                       throw("New file has no new data");
                     }
-                    console.log('New file data:' + "\n" + data);
+                    //console.log('New file data:' + "\n" + data);
                     return fsp.readFile(logFile2, 'utf8');
                   })
                   .then(function (data2) {
                     if (data2.indexOf("data old") === -1) {
                       throw("old file as no old data");
                     }
-                    console.log('Old file data:' + "\n" + data2);
+                    //console.log('Old file data:' + "\n" + data2);
                     return Promise.all([fsp.unlink(config.logFile), fsp.unlink(logFile2)]);
                   })
                   .then(function () {
@@ -345,10 +345,8 @@ describe('logger', function () {
         })
         .then(function (data) {
           if (data.indexOf("silly") !== -1) {
-            done("Silly things were logged");
-            return;
+            throw("Silly things were logged");
           }
-          return fsp.unlink(config.logFile);
         })
         .then(function () {
           done();
@@ -356,6 +354,69 @@ describe('logger', function () {
         .catch(function (err) {
           done(err)
         })
+        .finally(function () {
+          fsp.unlink(config.logFile);
+        })
+
     });
   });
-});
+
+
+  it('should throw error if writing when log writer stopped', function (done) {
+    var config = {
+      "logFile": "test7.log",
+      "logToConsole": false,
+      "logToFile": true,
+      "logLevel": {
+        "file": "silly",
+        "console": "silly"
+      }
+    };
+    var logWriter = new LogWriter(config);
+    logWriter.start()
+      .then(function () {
+        return logWriter.stop();
+      })
+      .then(function () {
+        var logger = logWriter.getLogger();
+        return logger.w("try log smth");
+      })
+      .then(function () {
+        done('did not throw!');
+      })
+      .catch(function () {
+
+      })
+      .finally(function () {
+        fsp.unlink(config.logFile);
+      });
+    logWriter.on('fatal', function () {
+      done()
+    });
+  });
+
+  it('should throw error if writing when log writer not started', function (done) {
+    var config = {
+      "logFile": "test8.log",
+      "logToConsole": false,
+      "logToFile": true,
+      "logLevel": {
+        "file": "silly",
+        "console": "silly"
+      }
+    };
+    var logWriter = new LogWriter(config);
+    var logger = logWriter.getLogger();
+    logWriter.on('fatal', function () {
+      done();
+    });
+    logger.w("try log smth")
+      .then(function () {
+        done('did not throw');
+      })
+      .catch(function () {
+
+      });
+  });
+})
+;

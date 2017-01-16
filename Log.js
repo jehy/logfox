@@ -139,7 +139,7 @@ var LogWriter = function (config) {
           resolve();
         });
         thisLogWriter.writeStream.on('error', function (err) {
-          var msg = 'createWriteStream error:' + err;
+          var msg = 'createWriteStream error: ' + err;
           console.log(cliColor.red.bold(msg));
           thisLogWriter.emit('fatal');
           reject(msg);
@@ -204,11 +204,17 @@ var LogWriter = function (config) {
   this.log = function (level, data, additionalData) {
 
     var thisLogWriter = this;
-    if (this.started === false) {
-      this.emit('fatal');
-      throw new Error('logfox can not write log with stopped logwriter (' + level + ':' + safeStringify(logData) + ')');
-    }
     return new Promise(function (resolve, reject) {
+
+
+      if (thisLogWriter.started === false) {
+        thisLogWriter.emit('fatal');
+        var msg = 'logfox can not write log with stopped logwriter' +
+          ' (' + level + ':' + safeStringify(data) + ')';
+        reject(msg);
+        throw new Error(msg);
+      }
+
       if (!config.logToFile && !config.logToConsole) {
         reject('Not configured for logging');
         return;
