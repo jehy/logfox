@@ -228,8 +228,8 @@ var LogWriter = function (config) {
           record.data.push({'Error': data[i].toString(), 'Stack': data[i].stack});// Error in not correctly serialized to JSON otherwise
           //and it must be an object for kibana better understanding
         }
-        else if (data[i] instanceof Array) {//for logstash whuch does not like arrays o_O
-          record.data.push(objectAssign({}, data[i]));
+        else if (data[i] instanceof Array) {//for logstash which does not like arrays o_O
+          record.data.push({'Array': data[i]});
         }
         else if (isObject(data[i]))
           record.data.push(data[i]);
@@ -249,7 +249,7 @@ var LogWriter = function (config) {
         'orderId': recordId
       };
       if (additionalData != null)
-        logData = Object.assign(logData, additionalData);
+        logData = objectAssign(logData, additionalData);
       if (record.data.length != 0)
         logData.data = record.data;
       if (config.logToConsole && thisLogWriter.shouldLog(level, config.logLevel.console)) {
