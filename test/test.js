@@ -280,7 +280,7 @@ describe('logger', function () {
             logWriter = LogWriterNew;
             logger = logWriter.getLogger();
             Promise.resolve()
-              .timeout(1000 * 2)
+              .delay(1000 * 2)
               .then(function () {
                 logWriterOld.stop();
                 return logger.i("data new");
