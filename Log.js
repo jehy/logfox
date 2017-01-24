@@ -127,24 +127,28 @@ var LogWriter = function (config) {
         return;
       }
       console.log(cliColor.blue('Starting logging system'));
-      if (config.logToFile) {
-        thisLogWriter.writeStream = fs.createWriteStream(config.logFile, {
-          flags: 'a',
-          autoClose: true
-        });
-        thisLogWriter.writeStream.on('open', function () {
-          thisLogWriter.started = true;
-          thisLogger.i('Logger started');
-          thisLogWriter.emit('started');
-          resolve();
-        });
-        thisLogWriter.writeStream.on('error', function (err) {
-          var msg = 'createWriteStream error: ' + err;
-          console.log(cliColor.red.bold(msg));
-          thisLogWriter.emit('fatal');
-          reject(msg);
-        });
+      if (!config.logToFile) {
+        thisLogWriter.started = true;
+        resolve();
+        return;
       }
+      thisLogWriter.writeStream = fs.createWriteStream(config.logFile, {
+        flags: 'a',
+        autoClose: true
+      });
+      thisLogWriter.writeStream.on('open', function () {
+        thisLogWriter.started = true;
+        thisLogger.i('Logger started');
+        thisLogWriter.emit('started');
+        resolve();
+      });
+      thisLogWriter.writeStream.on('error', function (err) {
+        var msg = 'createWriteStream error: ' + err;
+        console.log(cliColor.red.bold(msg));
+        thisLogWriter.emit('fatal');
+        reject(msg);
+      });
+
     });
   };
 
