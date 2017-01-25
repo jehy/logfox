@@ -99,6 +99,7 @@ var LogWriter = function (config) {
   this.orderId = 1;
   this.selfLogger = null;
 
+  this.priority = ['error', 'warn', 'info', 'debug', 'verbose', 'silly'];
 
   if (!isObject(config)) {
     this.emit('fatal');
@@ -111,6 +112,18 @@ var LogWriter = function (config) {
   if (config.logToConsole && (!has(config, 'logLevel') || !config.logLevel.console)) {
     this.emit('fatal');
     throw new Error('Invalid config for logfox (wrong console logging config)');
+  }
+
+  if (config.logToFile && (this.priority.indexOf(config.logLevel.file) === -1)) {
+    this.emit('fatal');
+    throw new Error('Invalid config for logfox (logging level can not be ' +
+      config.logLevel.file + ', it should be one of [' + this.priority.toString() + '])');
+  }
+
+  if (config.logToConsole && (this.priority.indexOf(config.logLevel.console) === -1)) {
+    this.emit('fatal');
+    throw new Error('Invalid config for logfox (logging level can not be ' +
+      config.logLevel.console + ', it should be one of [' + this.priority.toString() + '])');
   }
 
 
@@ -195,10 +208,10 @@ var LogWriter = function (config) {
     }
   };
 
+
   this.shouldLog = function (level, configMinLvl) {
-    var priority = ['error', 'warn', 'info', 'debug', 'verbose', 'silly'];
-    var NeedLog = priority.indexOf(configMinLvl);
-    var myLog = priority.indexOf(level);
+    var NeedLog = this.priority.indexOf(configMinLvl);
+    var myLog = this.priority.indexOf(level);
     if (myLog <= NeedLog)
       return true;
     return false;

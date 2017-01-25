@@ -70,6 +70,41 @@ describe('logger', function () {
   });
 
 
+  it('should not accept wrong file config (wrong file log level)', function () {
+    var config = {
+      "logToFile": true,
+      "logLevel": {
+        "file": "omg"
+      }
+    };
+    var thrown = false;
+    try {
+      var logWriter = new LogWriter(config);
+    }
+    catch (e) {
+      thrown = true;
+    }
+    assert.equal(thrown, true);
+  });
+
+  it('should not accept wrong file config (wrong console log level)', function () {
+    var config = {
+      "logToConsole": true,
+      "logLevel": {
+        "console": "omg"
+      }
+    };
+    var thrown = false;
+    try {
+      var logWriter = new LogWriter(config);
+    }
+    catch (e) {
+      thrown = true;
+    }
+    assert.equal(thrown, true);
+  });
+
+
   it('should fail if log file not writable', function (done) {
     var config = {
       "logFile": "/nothing-here/nonono",
