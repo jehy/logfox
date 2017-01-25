@@ -99,7 +99,7 @@ var LogWriter = function (config) {
   this.orderId = 1;
   this.selfLogger = null;
 
-  this.priority = ['error', 'warn', 'info', 'debug', 'verbose', 'silly'];
+  var priority = ['error', 'warn', 'info', 'debug', 'verbose', 'silly'];
 
   if (!isObject(config)) {
     this.emit('fatal');
@@ -114,16 +114,16 @@ var LogWriter = function (config) {
     throw new Error('Invalid config for logfox (wrong console logging config)');
   }
 
-  if (config.logToFile && (this.priority.indexOf(config.logLevel.file) === -1)) {
+  if (config.logToFile && (priority.indexOf(config.logLevel.file) === -1)) {
     this.emit('fatal');
     throw new Error('Invalid config for logfox (logging level can not be ' +
       config.logLevel.file + ', it should be one of [' + this.priority.toString() + '])');
   }
 
-  if (config.logToConsole && (this.priority.indexOf(config.logLevel.console) === -1)) {
+  if (config.logToConsole && (priority.indexOf(config.logLevel.console) === -1)) {
     this.emit('fatal');
     throw new Error('Invalid config for logfox (logging level can not be ' +
-      config.logLevel.console + ', it should be one of [' + this.priority.toString() + '])');
+      config.logLevel.console + ', it should be one of [' + priority.toString() + '])');
   }
 
 
@@ -139,7 +139,7 @@ var LogWriter = function (config) {
         reject(msg);
         return;
       }
-      console.log(cliColor.blue('Starting logging system'));
+      //console.log(cliColor.blue('Starting logging system'));
       if (!config.logToFile) {
         thisLogWriter.started = true;
         resolve();
@@ -168,7 +168,7 @@ var LogWriter = function (config) {
   this.stop = function (quiet) {
     var thisLogWriter = this;
     return new Promise(function (resolve, reject) {
-      console.log(cliColor.blue('Stopping Logging system'));
+      //console.log(cliColor.blue('Stopping Logging system'));
       if (!thisLogWriter.started) {
         if (!quiet) {
           console.log(cliColor.red.bold('Can not stop - logger service not started'));
@@ -176,16 +176,16 @@ var LogWriter = function (config) {
         resolve();
         return;
       }
-      thisLogWriter.writeStream.end();
-      thisLogWriter.started = false;
       thisLogWriter.writeStream.on('finish', function () {
-        console.log(cliColor.blue('Logging system stopped'));
+        //console.log(cliColor.blue('Logging system stopped'));
         resolve();
       });
+      thisLogWriter.writeStream.end();
+      thisLogWriter.started = false;
     });
   };
 
-  this.colorize = function (type, data) {
+  var colorize = function (type, data) {
     switch (type) {
       case 'error':
         return cliColor.red.bold(data);
@@ -209,9 +209,9 @@ var LogWriter = function (config) {
   };
 
 
-  this.shouldLog = function (level, configMinLvl) {
-    var NeedLog = this.priority.indexOf(configMinLvl);
-    var myLog = this.priority.indexOf(level);
+  var shouldLog = function (level, configMinLvl) {
+    var NeedLog = priority.indexOf(configMinLvl);
+    var myLog = priority.indexOf(level);
     if (myLog <= NeedLog)
       return true;
     return false;
@@ -269,10 +269,10 @@ var LogWriter = function (config) {
         logData = objectAssign(logData, additionalData);
       if (record.data.length != 0)
         logData.data = record.data;
-      if (config.logToConsole && thisLogWriter.shouldLog(level, config.logLevel.console)) {
-        console.log(thisLogWriter.colorize(level, safeStringify(logData, null, 4)));
+      if (config.logToConsole && shouldLog(level, config.logLevel.console)) {
+        console.log(colorize(level, safeStringify(logData, null, 4)));
       }
-      if (config.logToFile && thisLogWriter.shouldLog(level, config.logLevel.file) && (level != 'silly')) {
+      if (config.logToFile && shouldLog(level, config.logLevel.file) && (level != 'silly')) {
         //never log silly things to file!
         logData = safeStringify(logData) + "\n";
         thisLogWriter.writeStream.write(logData);
@@ -281,7 +281,11 @@ var LogWriter = function (config) {
       else resolve();
     });
   };
-
+  /**
+   *
+   * @param additionalData some data to add to request (user ip, for example)
+   * @return {Logger} new logger object which you can you use for logging itself
+   */
   this.getLogger = function (additionalData) {
     return new Logger(this, additionalData);
   }
