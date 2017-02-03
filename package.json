@@ -1,6 +1,6 @@
 {
   "name": "logfox",
-  "version": "0.2.8",
+  "version": "0.2.10",
   "description": "Application logger for express+elastic search",
   "main": "Log.js",
   "scripts": {
@@ -21,7 +21,7 @@
     "colors": "^1.1.2",
     "fs": "0.0.1-security",
     "json-stringify-safe": "^5.0.1",
-    "object-assign": "^4.1.0"
+    "object-assign": "^4.1.1"
   },
   "devDependencies": {
     "mocha": "^3.2.0",
