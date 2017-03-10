@@ -1,7 +1,6 @@
 #LogFox
-
 [![Build Status](https://travis-ci.org/jehy/logfox.svg?branch=master)](https://travis-ci.org/jehy/logfox)
-
+[![Coverage Status](https://coveralls.io/repos/github/jehy/logfox/badge.svg?branch=master)](https://coveralls.io/github/jehy/logfox?branch=master)
 ##Installation
 ```bash
 npm install logfox
