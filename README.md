@@ -1,12 +1,14 @@
-#LogFox
+# LogFox
+
 [![Build Status](https://travis-ci.org/jehy/logfox.svg?branch=master)](https://travis-ci.org/jehy/logfox)
 [![Coverage Status](https://coveralls.io/repos/github/jehy/logfox/badge.svg?branch=master)](https://coveralls.io/github/jehy/logfox?branch=master)
-##Installation
+
+## Installation
 ```bash
 npm install logfox
 ```
 
-##Usage
+## Usage
 **config.json**
 ```json
 {
@@ -59,7 +61,7 @@ app.post('/login', function (req, res) {
   req.log.i('Processing route /login');
 });
 ```
-##Rotating logs
+## Rotating logs
 App should handle it by itself, to force log writer to update file (for example if you rotated it),
  send it `kill -1 PID` (`SIGHUP`) and add code like this:
  
@@ -81,11 +83,11 @@ process.on('SIGHUP', function () {
   }, 1000 * 60);
 });
 ```
-##What can we log?
+## What can we log?
 You can log any number of string and objects. String will be concatinated in `message`,
 objects will be joined as array `data` and serialized to JSON.
 
-##Loggings statuses
+## Loggings statuses
 
 ### e (error)
 This is for when bad stuff happens. Use this tag in places like inside a catch statement.
