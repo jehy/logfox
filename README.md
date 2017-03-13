@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/jehy/logfox.svg?branch=master)](https://travis-ci.org/jehy/logfox)
 [![Coverage Status](https://coveralls.io/repos/github/jehy/logfox/badge.svg?branch=master)](https://coveralls.io/github/jehy/logfox?branch=master)
+[![dependencies Status](https://david-dm.org/jehy/logfox/status.svg)](https://david-dm.org/jehy/logfox)
+[![devDependencies Status](https://david-dm.org/jehy/logfox/dev-status.svg)](https://david-dm.org/jehy/logfox?type=dev)
 
 ## Installation
 ```bash
