@@ -138,6 +138,14 @@ class LogWriter extends EventEmitter {
       this.emit('fatal');
       throw new Error('Invalid config for logfox (not an object)');
     }
+    if (config === undefined) {
+      this.emit('fatal');
+      throw new Error('Invalid config for logfox (undefined)');
+    }
+    if (config === null) {
+      this.emit('fatal');
+      throw new Error('Invalid config for logfox (null)');
+    }
     if (config.logToFile && (!config.logFile || !has(config, 'logLevel') || !config.logLevel.file)) {
       this.emit('fatal');
       throw new Error('Invalid config for logfox (wrong file logging config)');
