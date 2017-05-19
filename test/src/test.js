@@ -1,17 +1,21 @@
 /* eslint-disable no-console*/
 /* eslint-disable no-unused-vars*/
+/* eslint-disable global-require*/
 
-const assert    = require('assert'),
-      fsp       = require('fs-extra'),
-      Promise   = require('bluebird'),
-      LogWriter = require('../../src/Log.js');
+const assert       = require('assert'),
+      fsp          = require('fs-extra'),
+      Promise      = require('bluebird'),
+      majorVersion = parseInt(process.versions.node.split('.')[0], 10);
 
-const majorVersion = parseInt(process.versions.node.split('.')[0], 10);
+let LogWriter;
 if (majorVersion <= 5) {
   console.log(`Using transpiled version of code and tests for your node version (${majorVersion})`);
+  LogWriter = require('../../lib/Log.js');
 } else {
   console.log(`Using non transpiled version of code and tests for your node version (${majorVersion})`);
+  LogWriter = require('../../src/Log.js');
 }
+
 
 describe('logger', () => {
 
