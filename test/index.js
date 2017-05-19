@@ -7,7 +7,7 @@
 
 const majorVersion = parseInt(process.versions.node.split('.')[0], 10);
 if (majorVersion <= 5) {
-  module.exports = require('../lib/test/test.js');
+  module.exports = require('./lib/test.js');
 } else {
-  module.exports = require('../src/test/test.js');
+  module.exports = require('./src/test.js');
 }

@@ -2,9 +2,9 @@
 /* eslint-disable no-unused-vars*/
 
 const assert    = require('assert'),
-      fsp       = require('fs-promise'),
+      fsp       = require('fs-extra'),
       Promise   = require('bluebird'),
-      LogWriter = require('../Log.js');
+      LogWriter = require('../../src/Log.js');
 
 const majorVersion = parseInt(process.versions.node.split('.')[0], 10);
 if (majorVersion <= 5) {
