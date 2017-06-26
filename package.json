@@ -1,13 +1,13 @@
 {
   "name": "logfox",
-  "version": "0.2.19",
+  "version": "0.2.20",
   "description": "Application logger for express+elastic search",
   "main": "Log.js",
   "scripts": {
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "test": "./node_modules/mocha/bin/mocha",
     "lint": "node ./node_modules/eslint/bin/eslint.js src test/src Log.js",
-    "compile": "node ./node_modules/babel-cli/bin/babel.js --presets es2015 -d ./lib src && node ./node_modules/babel-cli/bin/babel.js --presets es2015 -d ./test/lib test/src",
+    "compile": "node ./node_modules/babel-cli/bin/babel.js --presets es2015 --plugins transform-object-assign -d ./lib src && node ./node_modules/babel-cli/bin/babel.js --presets es2015 -d ./test/lib test/src",
     "coverage": "node ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha test/test.js",
     "prepublish": "npm run compile"
   },
@@ -24,22 +24,22 @@
   "dependencies": {
     "bluebird": "^3.5.0",
     "colors": "^1.1.2",
-    "json-stringify-safe": "^5.0.1",
-    "object-assign": "^4.1.1"
+    "json-stringify-safe": "^5.0.1"
   },
   "devDependencies": {
     "fs-extra": "^3.0.1",
+    "babel-plugin-transform-object-assign": "^6.22.0",
     "babel-cli": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
     "coveralls": "^2.13.1",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
-    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-import": "^2.6.0",
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-react": "^7.0.1",
+    "eslint-plugin-react": "^7.1.0",
     "eslint-plugin-standard": "^3.0.1",
     "istanbul": "^0.4.5",
-    "mocha": "^3.4.1"
+    "mocha": "^3.4.2"
   }
 }

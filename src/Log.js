@@ -4,7 +4,6 @@ const cliColor      = require('colors/safe'),
       fs            = require('fs'),
       safeStringify = require('json-stringify-safe'),
       Promise       = require('bluebird'),
-      objectAssign  = require('object-assign'),
       EventEmitter  = require('events');
 
 
@@ -274,7 +273,7 @@ class LogWriter extends EventEmitter {
         orderId: recordId,
       };
       if (additionalData != null) {
-        logData = objectAssign(logData, additionalData);
+        logData = Object.assign(logData, additionalData);
       }
       if (record.data.length !== 0) {
         logData.data = record.data;
